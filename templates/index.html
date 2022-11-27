@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row mx-3">
+        <div class="col">
+            <h1 class="display-4 text-center"><a href="{% url 'index' %}">TODO-LIST</a></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form action="{% url 'index' %}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search tasks" name="search-term">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% for task in tasks %}
+        <div class="row bg-white rounded shadow p-2 mx-auto my-3">
+            <div class="col-md-8">
+                <h5 class="fw-semibold">{{ task.task_name }}</h5>
+                <p class="small">Created: {{ task.created_at }}</p>
+                {% if task.last_updated > task.created_at %}
+                    <p class="small">Edited: {{ task.last_updated }}</p>
+                {% endif %}
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'update' task.id %}" class="btn btn-outline-primary"><i class="fa fa-edit"></i></a>
+                <a href="{% url 'delete' task.id %}" class="btn btn-outline-danger"><i class="fa fa-remove"></i></a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="row">
+            <div class="col my-3">
+                <h3>No items found with your search term, or there is no todo added yet.</h3>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col my-3">
+            <a href="{% url 'add' %}" class="btn btn-success"><i class="fa fa-plus"></i> Add a new task</a>
+        </div>
+    </div>
+{% endblock %}
